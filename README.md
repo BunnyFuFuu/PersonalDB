@@ -1,1 +1,2 @@
 # PersonalDB
+This is intended to be the backend to my personal website. It's going to hold JSONs of my hobbies, experiences, and side projects, which anyone can view but only I can edit or create in any form.
