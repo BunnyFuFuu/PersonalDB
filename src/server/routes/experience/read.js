@@ -2,8 +2,9 @@ module.exports = {
     method: "get",
     path: "/experience/read",
     handler: async function (req, res) {
-        // TODO
-        console.log("in experience GET");
-        res.sendStatus(200);
+        const exp = this.db.collection("experiences");
+        let result = {"docs": []};
+        const dbQuery = await exp.find().forEach(i => result.docs.push(i));
+        return res.json(result);
     }
 }
