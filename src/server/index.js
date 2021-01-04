@@ -43,6 +43,8 @@ class Server {
                 this.router.use(endpoint.path, (req, res, next)=> {
                     // TODO: check Auth0 management API to verify user has mgt privs
                     // TODO: also check if the user is authenticated at all
+                    if (!req.payload) return res.sendStatus(401);
+                    
                     next();
                 })
             }
