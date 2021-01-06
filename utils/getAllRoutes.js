@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * Gets all endpoint files within this subdirectory
  * @param { string } route
  * @returns { Array<string> } All valid file routes in this directory
  */

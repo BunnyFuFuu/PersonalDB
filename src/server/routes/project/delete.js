@@ -4,6 +4,9 @@ module.exports = {
     method: "delete",
     path: "/project/delete",
     admin: true,
+    /**
+     * Deletes the selected project from database.
+     */
     handler: async function (req, res) {
         const exp = this.db.collection("projects");
         const query = {_id: new ObjectID(req.body._id)};

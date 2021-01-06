@@ -4,6 +4,9 @@ module.exports = {
     method: "put",
     path: "/project/update",
     admin: true,
+    /**
+     * Updates selected project in database
+     */
     handler: async function (req, res) {
         const exp = this.db.collection("projects");
         req.body._id = new ObjectID(req.body._id);

@@ -4,6 +4,9 @@ module.exports = {
     method: "delete",
     path: "/experience/delete",
     admin: true,
+    /**
+     * Deletes the selected experience from database.
+     */
     handler: async function (req, res) {
         const exp = this.db.collection("experiences");
         const query = {_id: new ObjectID(req.body._id)};

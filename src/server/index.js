@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 /**
- * TODO: Actually define this.db
+ * Initializes the database and endpoints and starts the server
  */
 class Server {
     constructor() {
@@ -35,6 +35,10 @@ class Server {
             });
         this.registerAllEndpoints();
     }
+
+    /**
+     * Gets all valid endpoint files and registers them with the Express router
+     */
     registerAllEndpoints() {
         const routes = getAllRoutes(path.join(__dirname, 'routes')).flat();
         routes.map(route => {
@@ -47,8 +51,7 @@ class Server {
             if (endpoint.admin) {
                 
                 this.router.use(endpoint.path, (req, res, next)=> {
-                    // TODO: Verify the JWT
-                    // TODO: also check if the user is authenticated at all
+                    // Verifies the JWT and authorization level of user
                     if (!req.payload) return res.sendStatus(401);
                     let decoded;
                     try {

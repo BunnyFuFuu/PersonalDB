@@ -4,6 +4,9 @@ module.exports = {
     method: "put",
     path: "/experience/update",
     admin: true,
+    /**
+     * Updates selected experience in database
+     */
     handler: async function (req, res) {
         const exp = this.db.collection("experiences");
         req.body._id = new ObjectID(req.body._id);

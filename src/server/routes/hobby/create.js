@@ -2,6 +2,9 @@ module.exports = {
     method: "post",
     path: "/hobby/create",
     admin: true,
+    /**
+     * Creates a hobby on the database.
+     */
     handler: async function (req, res) {
         const exp = this.db.collection("hobbies");
         const result = await exp.insertOne(req.body);
