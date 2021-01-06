@@ -5,17 +5,18 @@ const body = require('body-parser');
 const getAllRoutes = require('../../utils/getAllRoutes');
 const { urlencoded } = require('express');
 const { MongoClient } = require("mongodb");                                                                                                                                   
-const dbConfig = require('../../db-config.json');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 /**
  * TODO: Actually define this.db
  */
 class Server {
     constructor() {
-        this.client = new MongoClient(dbConfig.uri);
+        this.client = new MongoClient(process.env.DB_ADDR);
         this.client.connect().then(() =>{
             console.debug(`Connected to MongoDB`);
-            this.db = this.client.db(dbConfig.db);
+            this.db = this.client.db(process.env.DB_NAME);
         });
         
         
@@ -23,7 +24,12 @@ class Server {
             .use(async (req, res, next) => {
                 const token = req.get("Authorization");
                 if(token) {
-                    // Parse token, ignore until we use admin enabled endpoints
+                    // Parse token
+                    try {
+                        req.payload = token.split(" ")[1];
+                    } catch (e) {
+                        console.debug('Issue with obtaining JWT.');
+                    }
                 }
                 return next();
             });
@@ -41,10 +47,23 @@ class Server {
             if (endpoint.admin) {
                 
                 this.router.use(endpoint.path, (req, res, next)=> {
-                    // TODO: check Auth0 management API to verify user has mgt privs
+                    // TODO: Verify the JWT
                     // TODO: also check if the user is authenticated at all
                     if (!req.payload) return res.sendStatus(401);
-                    
+                    let decoded;
+                    try {
+                        decoded = jwt.verify(req.payload, fs.readFileSync(path.join(__dirname, '../../dev-j3ai5m4d.pem')), { algorithms: ['RS256'] });
+                        //console.log(decoded.iss);
+                        if (decoded.iss != "https://dev-j3ai5m4d.us.auth0.com/") {
+                            return res.sendStatus(403);
+                        }
+                        if (decoded.sub != process.env.AUTH_USER) {
+                            return res.sendStatus(403);
+                        }
+
+                    } catch (e) {
+                        return res.sendStatus(403);
+                    }
                     next();
                 })
             }
