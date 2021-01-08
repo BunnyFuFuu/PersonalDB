@@ -58,9 +58,11 @@ class Server {
                         decoded = jwt.verify(req.payload, fs.readFileSync(path.join(__dirname, '../../dev-j3ai5m4d.pem')), { algorithms: ['RS256'] });
                         //console.log(decoded.iss);
                         if (decoded.iss != "https://dev-j3ai5m4d.us.auth0.com/") {
+                            console.debug("Issue with issuer");
                             return res.sendStatus(403);
                         }
                         if (decoded.sub != process.env.AUTH_USER) {
+                            console.debug("Issue with user");
                             return res.sendStatus(403);
                         }
 
