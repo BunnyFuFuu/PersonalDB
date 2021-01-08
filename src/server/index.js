@@ -67,6 +67,7 @@ class Server {
                         }
 
                     } catch (e) {
+                        console.debug("Error ", e);
                         return res.sendStatus(403);
                     }
                     next();
